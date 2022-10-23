@@ -71,3 +71,12 @@ struct String {
     struct Data data;   // abstract data block description
     char data_cell[];   // cell for clear data, char[] array
 };
+
+struct Request {
+    /*
+     * Info about request. 00 - create new block, 01 - read existing block
+     * 10 - update existing block, 11 - delete existing block
+     * Data for manipulation will be requested additionally
+     */
+    unsigned int request_type : REQUEST_BIT_SIZE;
+};
