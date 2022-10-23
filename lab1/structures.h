@@ -9,8 +9,9 @@
 
 #include <stdint.h>
 
-#define DATA_TYPE_SIZE  2
-#define DATA_SIZE_FOR_BOOLEAN 1
+#define DATA_TYPE_BIT_SIZE  2
+#define DATA_BIT_SIZE_FOR_BOOLEAN 1
+#define REQUEST_BIT_SIZE 2
 
 struct Data_type {
     /*
@@ -20,7 +21,7 @@ struct Data_type {
      * 10 - numbers with floating points
      * 11 - strings
      */
-    unsigned int data_type : DATA_TYPE_SIZE;
+    unsigned int data_type : DATA_TYPE_BIT_SIZE;
 };
 
 struct Data {
@@ -59,7 +60,7 @@ struct Boolean {
      * boolean data type, where:
      */
     struct Data data;                       // abstract data block description
-    int data_cell : DATA_SIZE_FOR_BOOLEAN;  // cell for clear data, 1-bit number (0 == false, 1 == true)
+    int data_cell : DATA_BIT_SIZE_FOR_BOOLEAN;  // cell for clear data, 1-bit number (0 == false, 1 == true)
 };
 
 struct String {
