@@ -13,7 +13,7 @@
 #define DATA_BIT_SIZE_FOR_BOOLEAN 1
 #define REQUEST_BIT_SIZE 2
 
-struct Data_type {
+typedef struct {
     /*
      * Field for storing data type. Size of this field is 2 bits, where
      * 00 - boolean variables
@@ -22,61 +22,61 @@ struct Data_type {
      * 11 - strings
      */
     unsigned int data_type : DATA_TYPE_BIT_SIZE;
-};
+} data_type;
 
-struct Data {
+typedef struct {
     /*
      * Child element of root element in my document tree for storing
      * abstract info about data's blocks, where:
      */
-    struct Data_type data_type;         // root element for defining data type
+    data_type data_type;                // root element for defining data type
     uint64_t hash_of_current_block;     // hash for unambiguous definition of this data block
     uint64_t hash_of_next_block;        // hash for unambiguous definition of continuation of this data block
     // (for case when data have not been stored in one data block)
-};
+} data;
 
-struct Integer {
+typedef struct {
     /*
      * Child element of root element in my document tree for storing
      * integer numbers, where:
      */
-    struct Data data;       // abstract data block description
+    data data;       // abstract data block description
     int32_t data_cell;      // cell for clear data, 32-bit signed number (like in tech task).
     // May be extended via using hash to next data block (optional).
-};
+} Integer;
 
-struct Float {
+typedef struct {
     /*
      * Child element of root element in my document tree for storing
      * numbers with floating points, where:
      */
-    struct Data data;   // abstract data block description
+    data data;   // abstract data block description
     double data_cell;   // cell for clear data, 64-bit signed floating numbers
-};
+} floating_number;
 
-struct Boolean {
+typedef struct {
     /*
      * Child element of root element in my document tree for storing
      * boolean data type, where:
      */
-    struct Data data;                       // abstract data block description
+    data data;                       // abstract data block description
     int data_cell : DATA_BIT_SIZE_FOR_BOOLEAN;  // cell for clear data, 1-bit number (0 == false, 1 == true)
-};
+} boolean;
 
-struct String {
+typedef struct {
     /*
      * Child element of root element in my document tree for storing
      * strings, where:
      */
-    struct Data data;   // abstract data block description
+    data data;   // abstract data block description
     char data_cell[];   // cell for clear data, char[] array
-};
+} string;
 
-struct Request {
+typedef struct {
     /*
      * Info about request. 00 - create new block, 01 - read existing block
      * 10 - update existing block, 11 - delete existing block
      * Data for manipulation will be requested additionally
      */
     unsigned int request_type : REQUEST_BIT_SIZE;
-};
+} request;
