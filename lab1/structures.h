@@ -43,7 +43,7 @@ typedef struct {
     data data;       // abstract data block description
     int32_t data_cell;      // cell for clear data, 32-bit signed number (like in tech task).
     // May be extended via using hash to next data block (optional).
-} Integer;
+} integer;
 
 typedef struct {
     /*
