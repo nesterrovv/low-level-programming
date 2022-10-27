@@ -31,6 +31,7 @@ typedef struct {
      */
     data_type data_type;                // root element for defining data type
     uint64_t hash_of_current_block;     // hash for unambiguous definition of this data block
+    uint64_t hash_of_previous_block;    // hash for unambiguous definition of previous part of this data block
     uint64_t hash_of_next_block;        // hash for unambiguous definition of continuation of this data block
     // (for case when data have not been stored in one data block)
 } data;
@@ -79,4 +80,6 @@ typedef struct {
      * Data for manipulation will be requested additionally
      */
     unsigned int request_type : REQUEST_BIT_SIZE;
+    data_type data_type;
+    char user_data[]; // necessary for CREATE, UPDATE operations, empty for READ and DELETE
 } request;
