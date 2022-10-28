@@ -30,9 +30,9 @@ typedef struct {
      * abstract info about data's blocks, where:
      */
     data_type data_type;                // root element for defining data type
-    uint64_t hash_of_current_block;     // hash for unambiguous definition of this data block
-    uint64_t hash_of_previous_block;    // hash for unambiguous definition of previous part of this data block
-    uint64_t hash_of_next_block;        // hash for unambiguous definition of continuation of this data block
+    uint64_t offset_of_current_block;   // hash for unambiguous definition of this data block
+    uint64_t offset_of_previous_block;  // hash for unambiguous definition of previous part of this data block
+    uint64_t offset_of_next_block;      // hash for unambiguous definition of continuation of this data block
     // (for case when data have not been stored in one data block)
 } data;
 
