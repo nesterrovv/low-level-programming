@@ -22,39 +22,33 @@ int main(int argc, char *argv[]) {
     fprintf(stdout, "\"Big data\" manager has been successfully started!\n");
     fprintf(stdout, "Which data manipulation do you wish to run?\n");
     fprintf(stdout, "Variants:\n");
-    fprintf(stdout, "  1. READING;\n");
-    fprintf(stdout, "  2. DELETING;\n");
-    fprintf(stdout, "  3. WRITING;\n");
-    fprintf(stdout, "  4. EDITING.\n");
+    fprintf(stdout, "  1. READ;\n");
+    fprintf(stdout, "  2. DELETE;\n");
+    fprintf(stdout, "  3. WRITE;\n");
+    fprintf(stdout, "  4. EDIT.\n");
+    fprintf(stdout, "  5. EXIT - for finishing a program.\n");
     fprintf(stdout,"You should type number of operation or it's name here.\n");
     char enter_before_trim[1024];
     char enter_after_trim [1024];
-    printf ("Type a string : ");
-    fgets (enter_before_trim, 1024, stdin);
-    trim(enter_after_trim, enter_before_trim);
-    to_upper_case(enter_after_trim);
-    printf("Your input: \'%s\'.\n", enter_after_trim);
-    switch (enter_after_trim) {
-        case "READING":
-        case "1":
+    while (!(strcmp(enter_after_trim, "EXIT") == 0 || strcmp(enter_after_trim, "5") == 0)) {
+        printf ("Type a command: ");
+        fgets (enter_before_trim, 1024, stdin);
+        trim(enter_after_trim, enter_before_trim);
+        to_upper_case(enter_after_trim);
+        printf("Your input: \'%s\'.\n", enter_after_trim);
+        if (strcmp(enter_after_trim, "READ") == 0 || strcmp(enter_after_trim, "1") == 0) {
             // TODO: add read function call
-            break;
-        case "DELETING":
-        case "2":
+        } else if (strcmp(enter_after_trim, "DELETE") == 0 || strcmp(enter_after_trim, "2") == 0) {
             // TODO: add delete function call
-            break;
-        case "WRITING":
-        case "3"
+        } else if (strcmp(enter_after_trim, "WRITE") == 0 || strcmp(enter_after_trim, "3") == 0) {
             // TODO: add write function call
-            break;
-        case "EDITING":
-        case "4"
-            // TODO add edit function call
-            break;
-        default:
-            printf("%s", "Incorrect enter. Please, try again.")
-            break;
+        } else if (strcmp(enter_after_trim, "EDIT") == 0 || strcmp(enter_after_trim, "4") == 0) {
+            // TODO edit function call
+        } else {
+            printf("%s\n", "Unknown command. Please, try again.");
+        }
     }
+    printf("%s\n", "Finishing a program. Thanks for using!");
     // --- testing of hashset implementation ---
 //    char *foo = "foo";
 //    char *missing = "missing";
