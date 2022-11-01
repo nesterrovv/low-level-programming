@@ -6,15 +6,19 @@
 #include "../include/hashset.h"
 #include "../include//hashset_itr.h"
 
+// function for deleting unnecessary space symbols at the beginning and/or ending of line
 void trim (char *dest, char *src);
+// function to casting content of all line to upper case
 void to_upper_case(char* temp);
 
+// argv[1] - filepath to data file (expected of it)
 int main(int argc, char *argv[]) {
     if (argc == 0) {
         printf("Filepath is not defined. You should define it as a command line argument.\n");
         return 1;
     }
     char* filepath = argv[1];
+    // user greeting
     fprintf(stdout, "\"Big data\" manager has been successfully started!\n");
     fprintf(stdout, "Which data manipulation do you wish to run?\n");
     fprintf(stdout, "Variants:\n");
@@ -30,20 +34,42 @@ int main(int argc, char *argv[]) {
     trim(enter_after_trim, enter_before_trim);
     to_upper_case(enter_after_trim);
     printf("Your input: \'%s\'.\n", enter_after_trim);
-    char *foo = "foo";
-    char *missing = "missing";
-    hashset_t set = hashset_create();
-    if (set == NULL) {
-        fprintf(stderr, "failed to create hashset instance\n");
-        abort();
+    switch (enter_after_trim) {
+        case "READING":
+        case "1":
+            // TODO: add read function call
+            break;
+        case "DELETING":
+        case "2":
+            // TODO: add delete function call
+            break;
+        case "WRITING":
+        case "3"
+            // TODO: add write function call
+            break;
+        case "EDITING":
+        case "4"
+            // TODO add edit function call
+            break;
+        default:
+            printf("%s", "Incorrect enter. Please, try again.")
+            break;
     }
-    hashset_add(set, foo);
-    assert(hashset_is_member(set, foo) == 1);
-    assert(hashset_is_member(set, missing) == 0);
-    int a = hashset_is_member(set, foo);
-    printf("%d\n", a);
-    int b = hashset_is_member(set, missing);
-    printf("%d\n", b);
+    // --- testing of hashset implementation ---
+//    char *foo = "foo";
+//    char *missing = "missing";
+//    hashset_t set = hashset_create();
+//    if (set == NULL) {
+//        fprintf(stderr, "failed to create hashset instance\n");
+//        abort();
+//    }
+//    hashset_add(set, foo);
+//    assert(hashset_is_member(set, foo) == 1);
+//    assert(hashset_is_member(set, missing) == 0);
+//    int a = hashset_is_member(set, foo);
+//    printf("%d\n", a);
+//    int b = hashset_is_member(set, missing);
+//    printf("%d\n", b);
 }
 
 void trim (char *dest, char *src)
