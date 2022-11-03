@@ -13,9 +13,10 @@
 #define DATA_TYPE_BIT_SIZE  2
 #define DATA_BIT_SIZE_FOR_BOOLEAN 1
 #define REQUEST_BIT_SIZE 2
+#define PATH_SIZE 260
 
 typedef struct {
-    char path[260];
+    char path[PATH_SIZE];
     bool isDirectory;
     void* patent;
     void* children;
@@ -89,6 +90,6 @@ typedef struct {
      * Data for manipulation will be requested additionally
      */
     unsigned int request_type : REQUEST_BIT_SIZE;
-    data_type data_type;
+    char path[PATH_SIZE];
     char user_data[]; // necessary for CREATE, UPDATE operations, empty for READ and DELETE
 } request;
