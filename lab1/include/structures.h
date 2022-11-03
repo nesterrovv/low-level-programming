@@ -8,10 +8,19 @@
 #endif //LOW_LEVEL_PROGRAMMING_STRUCTURES_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define DATA_TYPE_BIT_SIZE  2
 #define DATA_BIT_SIZE_FOR_BOOLEAN 1
 #define REQUEST_BIT_SIZE 2
+
+typedef struct {
+    char path[260];
+    bool isDirectory;
+    void* patent;
+    void* children;
+    void* data_cell;
+} node;
 
 typedef struct {
     /*
