@@ -12,10 +12,10 @@ PDIR = production
 
 LIBS = -lm
 
-_DEPS = hashset.h structures.h
+_DEPS = arraylist.h hashset.h hashset_itr.h node.h structures.h string_methods.h hashmap_base.h hashmap.h file_manager.h
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
-_OBJ = hashset.o main.o
+_OBJ = arraylist.o hashset.o hashset_itr.o node.o string_methods.o hashmap.o file_manager.o main.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
 $(ODIR)/%.o: src/%.c $(DEPS)
