@@ -6,6 +6,7 @@
 #define LOW_LEVEL_PROGRAMMING_STRUCTURES_H
 
 #include <stdint.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #define DATA_TYPE_BIT_SIZE  2
@@ -36,7 +37,7 @@ typedef struct {
     uint64_t offset_of_next_block;      // hash for unambiguous definition of continuation of this data block
                                         // (for case when data have not been stored in one data block)
     uint64_t offset_to_parent_node;
-    uint64_t children[4294967295];      // array of offsets to children nodes - size of array like in NTFS3уы
+    uint64_t children[65536];           // array of offsets to children nodes - size of array like in NTFS
     bool isDirectory;
 
 } data;
