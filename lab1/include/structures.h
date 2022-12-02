@@ -79,6 +79,18 @@ typedef struct {
     char data_cell[1024];   // cell for clear data, char[] array
 } string;
 
+enum type { my_int, my_float, my_boolean,  my_string };
+
+struct some_type {
+    enum type type;
+    union {
+        uint32_t            i;  // when integer
+        double              f;  // when double
+        char*               s;  // when string
+        bool                b;  // when boolean
+    };
+};
+
 //typedef struct {
 //    /*
 //     * Info about request. 00 - create new block, 01 - read existing block
