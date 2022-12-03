@@ -8,9 +8,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "../include/string_methods.h"
+#include "../include/structures.h"
 
 #define FILE_NOT_FOUND      1
 #define SUCCESS             0
+
+int available_offset = 0;
 
 int clear_navigator() {
     FILE* file_pointer;
@@ -38,54 +41,6 @@ int count_blocks() {
     return block_counter;
 }
 
-//char*** download_navigator() {
-//    FILE* file_pointer;
-//    char* line = NULL;
-//    ssize_t read;
-//    size_t len = 0;
-//    file_pointer = fopen("resources/navigator.txt", "r");
-//    if (file_pointer == NULL) {
-//        return FILE_NOT_FOUND;
-//    }
-//    int block_counter = count_blocks();
-//    char navigation_data[block_counter][2][4096];
-//    int current_block_number = 0;
-//    while ((read = getline(&line, &len, file_pointer)) != -1) {
-//        printf("Retrieved line of size: %zu\n", sizeof(line));
-//        printf("%s", line);
-//        char new_line[4096];
-//        strcpy(new_line, line);
-//        printf("Line updated. Current size is: %zu\n", sizeof(new_line));
-//        printf("%s", new_line);
-//        char **tokens;
-//        char split_data[2][4096];
-//        tokens = str_split(new_line, ' ');
-//        if (tokens) {
-//          int i;
-//          for (i = 0; *(tokens + i); i++) {
-//              printf("split_data=[%s]\n", *(tokens + i));
-//              strcpy(split_data[i], *(tokens + i));
-//              free(*(tokens + i));
-//          }
-//          printf("\n");
-//          free(tokens);
-//          strcpy(navigation_data[current_block_number][0], split_data[0]);
-//          strcpy(navigation_data[current_block_number][1], split_data[1]);
-//          printf("-----Data preparing. Step %d-----\n", i);
-//          printf("Key: '%s'\n", navigation_data[current_block_number][0]);
-//          printf("Value: '%s'\n", navigation_data[current_block_number][1]);
-//        }
-//        current_block_number++;
-//    }
-//    return ***navigation_data;
-//    fclose(file_pointer);
-//    if (line) {
-//        free(line);
-//    }
-//    return SUCCESS;
-//
-//}
-
 int write_to_navigator(char path_to_item[], int offset) {
     FILE* file_pointer;
     file_pointer = fopen("resources/navigator.txt", "a+");
@@ -95,4 +50,109 @@ int write_to_navigator(char path_to_item[], int offset) {
     fprintf(file_pointer,"%s %d\n",path_to_item, offset);
     fclose(file_pointer);
     return SUCCESS;
+}
+
+int write_to_data_heap(struct some_type* some_type, char* necessaryPath) {
+    FILE *file_pointer;
+    file_pointer = fopen("resources/data_heap.txt", "a+");
+    if (file_pointer == NULL) {
+        return FILE_NOT_FOUND;
+    }
+    // STRUCTURE CREATING
+    data current_data;
+    current_data.offset_to_parent_node = 0; // TODO: add finding an offset via entered path to current
+    // TODO: add changing of children array of parent node
+    // next two blocks are constant for integer/floating numbers/boolean types
+    current_data.offset_of_previous_block = 0;
+    current_data.offset_of_next_block = 0;
+    current_data.offset_of_current_block = available_offset; // TODO: receive this value from array of 'free' offsets
+    available_offset += 1;
+    current_data.children;
+    current_data.isDirectory = false;
+    switch (some_type->type) {
+        strcpy(current_data.pathToThisNode, necessaryPath);
+        //current_data.pathToThisNode = necessaryPath;
+        case my_int:;
+            // TODO check process of writing integer type structure;
+            current_data.data_type.data_type = 1;
+            integer this_integer;
+            this_integer.data = current_data;
+            this_integer.data_cell = some_type -> i;
+            // FINISH OF STRUCTURE CREATING
+            // SERIALIZING STRUCTURE TO FILE
+            fprintf(file_pointer, "%d ", this_integer.data.data_type.data_type);
+            fprintf(file_pointer, "%s ", this_integer.data.pathToThisNode);
+            fprintf(file_pointer, "%llu ", this_integer.data.offset_of_current_block);
+            fprintf(file_pointer, "%llu ", this_integer.data.offset_of_previous_block);
+            fprintf(file_pointer, "%llu ", this_integer.data.offset_of_next_block);
+            fprintf(file_pointer, "%llu ", this_integer.data.offset_to_parent_node);
+            for (int i = 0; i < 65536; i++) {
+                fprintf(file_pointer,"%llu ", this_integer.data.children[i]);
+            }
+            fprintf(file_pointer, "%d ", this_integer.data.isDirectory);
+            fprintf(file_pointer, "%d\n", this_integer.data_cell);
+            break;
+        case my_float:;
+            // TODO check process of writing floating_type type structure;
+            current_data.data_type.data_type = 2;
+            floating_number this_floating_number;
+            this_floating_number.data = current_data;
+            this_floating_number.data_cell = some_type -> f;
+            // FINISH OF STRUCTURE CREATING
+            // SERIALIZING STRUCTURE TO FILE
+            fprintf(file_pointer, "%d ", this_floating_number.data.data_type.data_type);
+            fprintf(file_pointer, "%s ", this_floating_number.data.pathToThisNode);
+            fprintf(file_pointer, "%llu ", this_floating_number.data.offset_of_current_block);
+            fprintf(file_pointer, "%llu ", this_floating_number.data.offset_of_previous_block);
+            fprintf(file_pointer, "%llu ", this_floating_number.data.offset_of_next_block);
+            fprintf(file_pointer, "%llu ", this_floating_number.data.offset_to_parent_node);
+            for (int i = 0; i < 65536; i++) {
+                fprintf(file_pointer,"%llu ", this_floating_number.data.children[i]);
+            }
+            fprintf(file_pointer, "%d ", this_floating_number.data.isDirectory);
+            fprintf(file_pointer, "%d\n", this_floating_number.data_cell);
+            break;
+        case my_string:;
+            // TODO check process of writing integer type structure;
+            current_data.data_type.data_type = 3;
+            string this_string;
+            this_string.data = current_data;
+            this_string.data_cell = some_type -> s;
+            // FINISH OF STRUCTURE CREATING
+            // SERIALIZING STRUCTURE TO FILE
+            fprintf(file_pointer, "%d ", this_string.data.data_type.data_type);
+            fprintf(file_pointer, "%s ", this_string.data.pathToThisNode);
+            fprintf(file_pointer, "%llu ", this_string.data.offset_of_current_block);
+            fprintf(file_pointer, "%llu ", this_string.data.offset_of_previous_block);
+            fprintf(file_pointer, "%llu ", this_string.data.offset_of_next_block);
+            fprintf(file_pointer, "%llu ", this_string.data.offset_to_parent_node);
+            for (int i = 0; i < 65536; i++) {
+                fprintf(file_pointer,"%llu ", this_string.data.children[i]);
+            }
+            fprintf(file_pointer, "%d ", this_string.data.isDirectory);
+            fprintf(file_pointer, "%d\n", this_string.data_cell);
+            break;
+        case my_boolean:;
+            // TODO check process of writing integer type structure;
+            current_data.data_type.data_type = 0;
+            boolean this_boolean;
+            this_boolean.data = current_data;
+            this_boolean.data_cell = some_type -> b;
+            // FINISH OF STRUCTURE CREATING
+            // SERIALIZING STRUCTURE TO FILE
+            fprintf(file_pointer, "%d ", this_boolean.data.data_type.data_type);
+            fprintf(file_pointer, "%s ", this_boolean.data.pathToThisNode);
+            fprintf(file_pointer, "%llu ", this_boolean.data.offset_of_current_block);
+            fprintf(file_pointer, "%llu ", this_boolean.data.offset_of_previous_block);
+            fprintf(file_pointer, "%llu ", this_boolean.data.offset_of_next_block);
+            fprintf(file_pointer, "%llu ", this_boolean.data.offset_to_parent_node);
+            for (int i = 0; i < 65536; i++) {
+                fprintf(file_pointer,"%llu ", this_boolean.data.children[i]);
+            }
+            fprintf(file_pointer, "%d ", this_boolean.data.isDirectory);
+            fprintf(file_pointer, "%d\n", this_boolean.data_cell);
+            break;
+        default:
+            abort();
+    }
 }
