@@ -33,9 +33,51 @@ int read_chunk_integer(long offset, integer* destination) {
     fseek(file, 0L, SEEK_SET);
     int result = 0;
     if (is_chunk_exists(file, offset)) {
-        long necessary_offset = (offset - 1) * 1152;
+        long necessary_offset = (offset - 1) * sizeof(integer);
         fseek(file, necessary_offset, SEEK_SET);
         result = fread(destination, sizeof(integer), 1, file);
+        fseek(file, 0L, SEEK_SET);
+    }
+    fclose(file);
+    return result;
+}
+
+int read_chunk_floating_number(long offset, floating_number* destination) {
+    FILE* file = fopen("resources/persons.txt", "rb");
+    fseek(file, 0L, SEEK_SET);
+    int result = 0;
+    if (is_chunk_exists(file, offset)) {
+        long necessary_offset = (offset - 1) * sizeof(floating_number);
+        fseek(file, necessary_offset, SEEK_SET);
+        result = fread(destination, sizeof(floating_number), 1, file);
+        fseek(file, 0L, SEEK_SET);
+    }
+    fclose(file);
+    return result;
+}
+
+int read_chunk_string(long offset, string* destination) {
+    FILE* file = fopen("resources/persons.txt", "rb");
+    fseek(file, 0L, SEEK_SET);
+    int result = 0;
+    if (is_chunk_exists(file, offset)) {
+        long necessary_offset = (offset - 1) * sizeof(string);
+        fseek(file, necessary_offset, SEEK_SET);
+        result = fread(destination, sizeof(string), 1, file);
+        fseek(file, 0L, SEEK_SET);
+    }
+    fclose(file);
+    return result;
+}
+
+int read_chunk_boolean(long offset, boolean* destination) {
+    FILE* file = fopen("resources/persons.txt", "rb");
+    fseek(file, 0L, SEEK_SET);
+    int result = 0;
+    if (is_chunk_exists(file, offset)) {
+        long necessary_offset = (offset - 1) * sizeof(boolean);
+        fseek(file, necessary_offset, SEEK_SET);
+        result = fread(destination, sizeof(boolean), 1, file);
         fseek(file, 0L, SEEK_SET);
     }
     fclose(file);
