@@ -84,6 +84,21 @@ int read_chunk_boolean(long offset, boolean* destination) {
     return result;
 }
 
+
+int read_item_path(long offset, char* destination) {
+    FILE* file = fopen("resources/persons.txt", "rb");
+    fseek(file, 0,SEEK_SET);
+    int result = 0;
+    if (is_chunk_exists(file, offset)) {
+        long necessary_offset = (offset - 1) * sizeof(integer) + sizeof(unsigned int);
+        fseek(file, necessary_offset, SEEK_SET);
+        result = fread(destination, 4096, 1, file);
+        fseek(file, 0L, SEEK_SET);
+    }
+    fclose(file);
+    return result;
+}
+
 int clear_navigator() {
     FILE* file_pointer;
     file_pointer = fopen("resources/navigator.txt", "w");
