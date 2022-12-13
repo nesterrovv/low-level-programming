@@ -32,10 +32,11 @@ typedef struct {
      */
     /*
      * Field for storing data type, where
-     * 0 - boolean variables
+     * 0 - folder
      * 1 - integer numbers
      * 2 - numbers with floating points
      * 3 - strings
+     * 4 - boolean
      */
     unsigned int data_type;
     char pathToThisNode[1024];          // unix-like path to this node in document tree
