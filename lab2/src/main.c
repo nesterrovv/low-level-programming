@@ -368,3 +368,63 @@ static void print_string(struct my_string* string){
         printf("%c", string -> content[iteration_number]);
     }
 }
+
+static void represent_operator(struct operator_of_comparison *operator_of_comparison, uint8_t number) {
+    printf("::::: Current operator: %d: ", number);
+    switch (operator_of_comparison -> data_type_name) {
+        case INTEGER:
+            printf("%ld", operator_of_comparison -> content.integer);
+            break;
+        case FLOATING_NUMBER:
+            printf("%f", operator_of_comparison -> content.floating_number);
+            break;
+        case STRING:
+            print_string(operator_of_comparison -> content.string);
+            break;
+        default:
+            printf("UNKNOWN TYPE FOUND!");
+            break;
+    }
+    if (operator_of_comparison -> field_of_operator) {
+        printf("::: IT IS NOT OPERATOR. FIELD FOUND :::");
+    }
+    printf("\n");
+}
+
+static void represent_filter(struct list_of_filters* list_of_filters) {
+    printf("::::::: FILTERS DESCRIPTION :::::::\n");
+    size_t tree_level = 1;
+    if (!list_of_filters) {
+        return;
+    }
+    struct list_of_comparators* list_of_comparators;
+    while (list_of_filters) {
+        printf("::::: CURRENT FILTER: %zu :::::\n", tree_level++);
+        printf("::::: NOT PASSED: %d\n :::::", list_of_filters -> current_filter -> not_passed);
+        size_t comparator_level = 1;
+        list_of_comparators = list_of_filters -> current_filter -> list_of_comparators;
+        if (list_of_comparators) {
+            printf("::::: COMPARATORS DESCRIPTION :::::\n");
+            while (list_of_comparators) {
+                printf("::: CURRENT COMPARATOR: %zu :::\n", comparator_level++);
+                printf("::: IT HAS NEGATIVE VALUE: %d:::\n", list_of_comparators -> current_comparator -> false);
+                if (list_of_comparators -> current_comparator -> true) {
+                    printf("::: COMPARATOR RETURNS TRUE :::\n");
+                } else {
+                    printf("::: OPERATION FOUND. EXECUTING... DESCRIPTION OF IT :::\n");
+                    represent_operator(list_of_comparators -> current_comparator -> first_operator,
+                                       1);
+                    printf("::: COMPARISON OPERATION %c :::\n", list_of_comparators -> current_comparator -> comparison_operation);
+                    represent_operator(list_of_comparators -> current_comparator -> second_operator,
+                                       2);
+                }
+                printf("::: CURRENT COMPARATOR IS OVER :::\n");
+                list_of_comparators = list_of_comparators -> next_comparator; // shift to next comparator
+            }
+            printf("::::: ALL COMPARATORS ARE OVER :::::\n");
+        }
+        printf("::::: CURRENT FILTER IS OVER :::::\n");
+        list_of_filters = list_of_filters -> next_filter; // shift to next filter
+    }
+    printf("::::::: ALL FILTERS ARE OVER :::::::\n");
+}
