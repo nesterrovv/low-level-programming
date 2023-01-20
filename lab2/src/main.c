@@ -428,3 +428,46 @@ static void represent_filter(struct list_of_filters* list_of_filters) {
     }
     printf("::::::: ALL FILTERS ARE OVER :::::::\n");
 }
+
+static void print_representation(struct representation* representation) {
+    if (!representation) {
+        return;
+    }
+    printf("::::::: CURRENT OPERATION: %c :::::::\n", representation -> base_operation);
+    size_t tree_level = 1;
+    struct list_of_tree_level* list_of_tree_level = representation -> document_tree;
+    while (list_of_tree_level) {
+        printf("::::: CURRENT DOCUMENT TREE LEVEL: %zu :::::\n", tree_level++);
+        printf("::::: TREE NODE RELATIONS DESCRIPTION :::::\n");
+        switch (list_of_tree_level -> location) {
+            case IS_ROOT_NODE:
+                printf("::: IT IS ROOT NODE :::\n");
+                break;
+            case IS_CHILD_NODE:
+                printf("::: IT IS CHILD NODE :::\n");
+                break;
+            case IS_FREE_NODE:
+                printf("::: IT IS FREE NODE :::\n");
+                break;
+            default:
+                printf("::: CANNOT ANALYZE RELATION FOR THIS NODE :::\n");
+                break;
+        }
+        printf("::::: IT HAS NEGATIVE VALUE: %d :::::\n", list_of_tree_level -> false);
+        if (list_of_tree_level -> any) {
+            printf("::::: SOME ID IS STORED :::::\n");
+        } else {
+            printf("ID FOR THIS TREE LEVEL: %ld\n", list_of_tree_level -> item -> current_item);
+        }
+        represent_filter(list_of_tree_level->list_of_filters);
+        printf("::::::: CURRENT OPERATION IS OVER :::::::\n");
+        list_of_tree_level = list_of_tree_level -> next_list_of_tree_level; // shift to next level of document tree
+    }
+}
+static void print_syntax_error_explanation(){
+    printf("XPath syntax error. Try to check if request has been written correctly.\n");
+}
+
+static void print_unknown_error_explanation(){
+    printf("Unknown error. Try to check your request and try again after application reloading.\n");
+}
