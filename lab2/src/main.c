@@ -471,3 +471,24 @@ static void print_syntax_error_explanation(){
 static void print_unknown_error_explanation(){
     printf("Unknown error. Try to check your request and try again after application reloading.\n");
 }
+
+void analyze_request(enum possible_states document_tree_state, char *result_of_analyze, struct representation* representation) {
+    if (document_tree_state == IS_ERROR && !result_of_analyze){
+        print_representation(representation);
+    } else if (document_tree_state == IS_ERROR){
+        print_syntax_error_explanation();
+    } else {
+        print_unknown_error_explanation();
+    }
+}
+
+struct list_of_tree_level* create_list_of_tree_level(uint8_t false, uint8_t any, enum node_relations location){
+    struct list_of_tree_level *new_list_of_tree_level = check_malloc(sizeof(struct list_of_tree_level));
+    new_list_of_tree_level -> next_list_of_tree_level   = NULL;
+    new_list_of_tree_level -> list_of_filters           = NULL;
+    new_list_of_tree_level -> item                      = NULL;
+    new_list_of_tree_level -> false                     = false;
+    new_list_of_tree_level -> any                       = any;
+    new_list_of_tree_level -> location                  = location;
+    return new_list_of_tree_level;
+}
