@@ -492,3 +492,37 @@ struct list_of_tree_level* create_list_of_tree_level(uint8_t false, uint8_t any,
     new_list_of_tree_level -> location                  = location;
     return new_list_of_tree_level;
 }
+
+int main() {
+    char request[MAXIMAL_COMMAND_LENGTH], *request_for_analyze;
+    enum possible_states current_document_tree_state;
+    strcpy(request,"+/42[tag<10][importance>41.01|name:'nesterrovv][root=1]\0");
+    request_for_analyze = request + 1;
+    struct representation* representation = read_base_operation(request[0]);
+    struct list_of_tree_level *current_document_tree_level = create_list_of_tree_level(0, 0 ,IS_ROOT_NODE);
+    if (*request_for_analyze == '/'){
+        current_document_tree_state = HAS_NEXT;
+    } else if (*request_for_analyze){
+        current_document_tree_level->location = IS_FREE_NODE;
+        request[0] = '/';
+        request_for_analyze = request;
+        current_document_tree_state = HAS_NEXT;
+    } else {
+        request_for_analyze = request;
+        current_document_tree_state = IS_ERROR;
+    }
+    while (request_for_analyze && current_document_tree_state != IS_ERROR) {
+        current_document_tree_state = read_state(current_document_tree_state, &request_for_analyze, current_document_tree_level);
+        if (current_document_tree_state == HAS_NEXT && *request_for_analyze) {
+            current_document_tree_level->next_list_of_tree_level = representation->document_tree;
+            representation->document_tree = current_document_tree_level;
+            current_document_tree_level = create_list_of_tree_level(0, 0, IS_CHILD_NODE);
+        }
+    }
+    if (current_document_tree_level) {
+        current_document_tree_level -> next_list_of_tree_level = representation -> document_tree;
+        representation->document_tree = current_document_tree_level;
+    }
+    analyze_request(current_document_tree_state, request_for_analyze, representation);
+    return 0;
+}
