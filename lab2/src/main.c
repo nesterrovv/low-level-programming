@@ -473,7 +473,7 @@ static void print_unknown_error_explanation(){
 }
 
 void analyze_request(enum possible_states document_tree_state, char *result_of_analyze, struct representation* representation) {
-    if (document_tree_state == IS_ERROR && !result_of_analyze){
+    if (document_tree_state == IS_ERROR && !*result_of_analyze){
         print_representation(representation);
     } else if (document_tree_state == IS_ERROR){
         print_syntax_error_explanation();
