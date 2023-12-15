@@ -1,0 +1,3 @@
+C:/Users/Иван Нестеров/Documents/GitHub/low-level-programming/lab2/cmake-build-debug/CMakeFiles/lab2.dir
+C:/Users/Иван Нестеров/Documents/GitHub/low-level-programming/lab2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Иван Нестеров/Documents/GitHub/low-level-programming/lab2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
