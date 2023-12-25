@@ -57,3 +57,22 @@ union data_types {
     int64_t boolean;
     struct my_string* string;
 };
+
+struct operator_of_comparison {
+    uint8_t field_of_operator;
+    enum data_types_names data_type_name;
+    union data_types content;
+};
+
+struct comparator {
+    uint8_t false;
+    uint8_t true;
+    enum comparison_operations_symbols comparison_operation;
+    struct operator_of_comparison* first_operator;
+    struct operator_of_comparison* second_operator;
+};
+
+struct list_of_comparators {
+    struct comparator* current_comparator;
+    struct list_of_comparators* next_comparator;
+};
