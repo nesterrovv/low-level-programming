@@ -76,3 +76,13 @@ struct list_of_comparators {
     struct comparator* current_comparator;
     struct list_of_comparators* next_comparator;
 };
+
+struct filter {
+    uint8_t not_passed;
+    struct list_of_comparators* list_of_comparators;
+};
+
+struct list_of_filters {
+    struct list_of_filters* next_filter;
+    struct filter* current_filter;
+};
