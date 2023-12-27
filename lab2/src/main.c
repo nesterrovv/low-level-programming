@@ -86,3 +86,22 @@ struct list_of_filters {
     struct list_of_filters* next_filter;
     struct filter* current_filter;
 };
+
+struct list_of_items {
+    struct list_of_items* next_item;
+    int64_t current_item;
+};
+
+struct list_of_tree_level {
+    uint8_t false;
+    uint8_t any;
+    enum node_relations location;
+    struct list_of_tree_level* next_list_of_tree_level;
+    struct list_of_items* item;
+    struct list_of_filters* list_of_filters;
+};
+
+struct representation {
+    enum base_operations base_operation;
+    struct list_of_tree_level* document_tree;
+};
