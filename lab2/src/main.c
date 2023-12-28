@@ -105,3 +105,53 @@ struct representation {
     enum base_operations base_operation;
     struct list_of_tree_level* document_tree;
 };
+
+void* check_malloc(size_t new_memory){
+    size += new_memory;
+    return malloc(new_memory);
+}
+
+enum possible_states execute_next(char **string, struct list_of_tree_level *level) {
+    if (**string == '/' && *(*string)++) {
+        return IS_NAME;
+    } else {
+        return IS_ERROR;
+    }
+}
+
+struct list_of_items* create_new_list_of_items(int64_t ID){
+    struct list_of_items* new_list_of_items = check_malloc(sizeof(struct list_of_items));
+    new_list_of_items -> current_item = ID;
+    new_list_of_items -> next_item = NULL;
+    return new_list_of_items;
+}
+
+enum possible_states execute_name(char **string, struct list_of_tree_level* current_level) {
+    uint8_t negative = 0, any = 0;
+    if (**string == '!' && *(*string)++) negative = 1;
+    if (**string == '*' && *(*string)++) any = 1;
+    if (!any) {
+        if (**string && **string > '0' && **string < '9') {
+            char *temp_p = *string;
+            size_t len = 0;
+            while (temp_p[len] >= '0' && temp_p[len] <= '9') len++;
+            temp_p = *string;
+            int64_t id = 0;
+            for (size_t iter = 0; iter < len; iter++) {
+                id = 10 * id + temp_p[iter] - '0';
+            }
+            current_level->item = create_new_list_of_items(id);
+            current_level->false = negative;
+            *string = temp_p + len;
+        } else {
+            return IS_ERROR;
+        }
+    } else {
+        current_level->any = 1;
+    }
+    if (**string == '[' || **string == '!') {
+        return IS_ATTRIBUTE;
+    } else {
+        return HAS_NEXT;
+    }
+}
