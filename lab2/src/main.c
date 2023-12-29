@@ -155,3 +155,87 @@ enum possible_states execute_name(char **string, struct list_of_tree_level* curr
         return HAS_NEXT;
     }
 }
+
+struct operator_of_comparison *create_operator(uint8_t field_of_operator, enum data_types_names type_name,
+                                               union data_types content) {
+    struct operator_of_comparison* new_operator = check_malloc(sizeof(struct operator_of_comparison));
+    new_operator -> content = content;
+    new_operator -> data_type_name = type_name;
+    new_operator -> field_of_operator = field_of_operator;
+    return new_operator;
+}
+
+struct my_string* create_string(size_t size_of_string, char* content){
+    struct my_string* new_string = check_malloc(sizeof(struct my_string));
+    new_string -> content = content;
+    new_string -> string_size = size_of_string;
+    return new_string;
+}
+
+struct operator_of_comparison* read_operator_of_comparison(char** string){
+    uint8_t integer_number = 0;
+    if (**string && **string > '0' && **string < '9') {
+        integer_number = 1;
+    }
+    char* temporary_parent = *string;
+    size_t length = 0;
+    struct operator_of_comparison *operator_of_comparison;
+    if (integer_number) {
+        double value = 0;
+        uint8_t floating_number = 0;
+        while (temporary_parent[length] && (temporary_parent[length] >= '0' && temporary_parent[length] <= '9' ||
+                                            temporary_parent[length] == '.')) {
+            if (temporary_parent[length] == '.') {
+                length++;
+                if (floating_number) {
+                    return NULL;
+                }
+                floating_number = 1;
+                continue;
+            }
+            if (floating_number) {
+                double exponent = 0.1;
+                for(size_t iteration_number = 1; iteration_number < floating_number; iteration_number++) {
+                    exponent *= 0.1;
+                }
+                floating_number++;
+                value = value +  exponent * (temporary_parent[length] - '0');
+            } else {
+                value = 10 * value + temporary_parent[length] - '0';
+            }
+            length++;
+        }
+        union data_types data_type;
+        if (floating_number) {
+            data_type.floating_number = value;
+            operator_of_comparison = create_operator(!integer_number, FLOATING_NUMBER,
+                                                     data_type);
+        } else {
+            data_type.integer = (int64_t) value;
+            operator_of_comparison = create_operator(!integer_number, INTEGER, data_type);
+        }
+
+    } else {
+        uint8_t string_data = 1;
+        if (**string == '\'' && *(*string)++) {
+            string_data = 0;
+        }
+        temporary_parent = *string;
+        while (temporary_parent[length] && (temporary_parent[length] >= 'a' && temporary_parent[length] <= 'z' ||
+                                            temporary_parent[length] >= 'A' && temporary_parent[length] <= 'Z')){
+            length++;
+        }
+        char *value = check_malloc(sizeof(char) * length);
+        temporary_parent = *string;
+        for (size_t iter = 0; iter < length; iter++){
+            value[iter] = temporary_parent[iter];
+        }
+        struct my_string* str_data = create_string(length, value);
+        union data_types new_data_type;
+        new_data_type.string = str_data;
+        operator_of_comparison = create_operator(!integer_number, STRING, new_data_type);
+        operator_of_comparison -> field_of_operator = string_data;
+    }
+    *string += length;
+    return operator_of_comparison;
+}
