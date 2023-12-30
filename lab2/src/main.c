@@ -261,3 +261,43 @@ struct list_of_filters* create_filter_list_with_filter(uint8_t false){
     list_of_filters -> current_filter = my_filter;
     return list_of_filters;
 }
+
+struct list_of_comparators* create_list_of_comparators(){
+    struct list_of_comparators* list_of_comparators = check_malloc(sizeof(struct list_of_comparators));
+    list_of_comparators -> current_comparator = NULL;
+    list_of_comparators -> next_comparator = NULL;
+    return list_of_comparators;
+}
+
+struct comparator* create_comparator(){
+    struct comparator* new_comparator = check_malloc(sizeof(struct comparator));
+    new_comparator -> false = 0;
+    new_comparator -> true = 0;
+    new_comparator -> comparison_operation = 0;
+    new_comparator -> first_operator = NULL;
+    new_comparator -> second_operator = NULL;
+    return new_comparator;
+}
+
+struct comparator* execute_filter(char** string){
+    struct comparator* new_comparator = create_comparator();
+    if (**string && **string=='!' && *(*string)++) {
+        new_comparator -> false = 1;
+    }
+    if (**string && **string=='@' && *(*string)++) {
+        new_comparator -> true = 1;
+    } else {
+        new_comparator -> first_operator = read_operator_of_comparison(string);
+        new_comparator -> comparison_operation = (enum comparison_operations_symbols) *(*string)++;
+        new_comparator -> second_operator = read_operator_of_comparison(string);
+    }
+    return new_comparator;
+}
+
+void add_comparator(struct list_of_filters* list_of_filters, struct comparator* new_comparator){
+    struct list_of_comparators* list_of_comparators = create_list_of_comparators();
+    list_of_comparators -> current_comparator = new_comparator; // adding
+    // including this object to the chain
+    list_of_comparators -> next_comparator = list_of_filters -> current_filter -> list_of_comparators;
+    list_of_filters -> current_filter -> list_of_comparators = list_of_comparators;
+}
