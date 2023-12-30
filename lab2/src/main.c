@@ -239,3 +239,25 @@ struct operator_of_comparison* read_operator_of_comparison(char** string){
     *string += length;
     return operator_of_comparison;
 }
+
+struct filter *create_filter(uint8_t false){
+    struct filter* filter = check_malloc(sizeof(struct filter));
+    filter -> not_passed = false;
+    filter -> list_of_comparators = NULL;
+    return filter;
+}
+
+struct list_of_filters* create_filter_list(){
+    struct list_of_filters* list_of_filters = check_malloc(sizeof(struct list_of_filters));
+    list_of_filters -> next_filter = NULL;
+    list_of_filters -> current_filter = NULL;
+    return list_of_filters;
+}
+
+
+struct list_of_filters* create_filter_list_with_filter(uint8_t false){
+    struct filter* my_filter = create_filter(false);
+    struct list_of_filters* list_of_filters = create_filter_list();
+    list_of_filters -> current_filter = my_filter;
+    return list_of_filters;
+}
