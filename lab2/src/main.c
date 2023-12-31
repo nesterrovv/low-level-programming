@@ -301,3 +301,42 @@ void add_comparator(struct list_of_filters* list_of_filters, struct comparator* 
     list_of_comparators -> next_comparator = list_of_filters -> current_filter -> list_of_comparators;
     list_of_filters -> current_filter -> list_of_comparators = list_of_comparators;
 }
+
+enum possible_states execute_attribute(char** string, struct list_of_tree_level* level) {
+    uint8_t false = 0;
+    struct comparator* new_comparator;
+    if (**string && **string == '!' && *(*string)++) {
+        false++;
+    }
+    if (**string == '[') {
+        struct list_of_filters* list_of_filters = create_filter_list_with_filter(false);
+        list_of_filters -> next_filter = level -> list_of_filters;
+        level -> list_of_filters = list_of_filters;
+        while (**string != ']' && *(*string)++) {
+            new_comparator = execute_filter(string);
+            add_comparator(level -> list_of_filters, new_comparator);
+            if (**string != '|' && **string != ']' && *(*string)++) {
+                return IS_ERROR;
+            }
+        }
+        (*string)++;
+        if (**string == '[' || **string == '!') {
+            return IS_ATTRIBUTE;
+        } else {
+            return HAS_NEXT;
+        }
+    } else {
+        return IS_ERROR;
+    }
+}
+
+enum possible_states execute_error(char** string, struct list_of_tree_level *level) {
+    return IS_ERROR;
+}
+
+enum possible_states (*choose_operation_by_state[4]) (char**, struct list_of_tree_level*) = {
+        [HAS_NEXT] = execute_next,
+        [IS_NAME] = execute_name,
+        [IS_ATTRIBUTE] = execute_attribute,
+        [IS_ERROR] = execute_error,
+};
