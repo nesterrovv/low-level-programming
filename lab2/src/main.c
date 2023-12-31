@@ -340,3 +340,31 @@ enum possible_states (*choose_operation_by_state[4]) (char**, struct list_of_tre
         [IS_ATTRIBUTE] = execute_attribute,
         [IS_ERROR] = execute_error,
 };
+
+struct representation* init_representation(enum base_operations base_operation){
+    struct representation* representation = check_malloc(sizeof(struct representation));
+    representation -> document_tree = NULL;
+    representation -> base_operation = base_operation;
+    return representation;
+}
+
+struct representation* read_base_operation(char base_operation_symbol){
+    if (base_operation_symbol != '-' &&
+        base_operation_symbol != '+' &&
+        base_operation_symbol != '?' &&
+        base_operation_symbol != '=') {
+        return NULL;
+    } else {
+        return init_representation(base_operation_symbol);
+    }
+}
+
+enum possible_states read_state(enum possible_states current_state, char** string, struct list_of_tree_level* level) {
+    return choose_operation_by_state[current_state](string, level);
+}
+
+static void print_string(struct my_string* string){
+    for (size_t iteration_number = 0; iteration_number < string -> string_size; iteration_number++) {
+        printf("%c", string -> content[iteration_number]);
+    }
+}
